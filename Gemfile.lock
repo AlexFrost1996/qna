@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/faker-ruby/faker.git
+  revision: 072c59663af3d738d772cb5ad1c8f5143e677dfe
+  branch: master
+  specs:
+    faker (2.19.0)
+      i18n (>= 1.8.11, < 2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -266,6 +274,7 @@ DEPENDENCIES
   decent_exposure (~> 3.0)
   devise
   factory_bot_rails
+  faker!
   jbuilder (~> 2.7)
   launchy
   listen (~> 3.3)
