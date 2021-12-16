@@ -167,15 +167,30 @@ RSpec.describe AnswersController, type: :controller do
     context 'Authenticated user' do
       before { login(user) }
 
-      let!(:answer) { create :answer, user: user }
+      context "user's answer" do
+        let!(:answer) { create :answer, user: user }
   
-      it 'deletes the answer' do
-        expect { delete :destroy, params: { id: answer, user: user } }.to change(Answer, :count).by(-1)
+        it 'deletes the answer' do
+          expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+        end
+    
+        it 'redirects to question' do
+          expect { delete :destroy, params: { id: answer } }
+          redirect_to question_path(answer.question)
+        end
       end
-  
-      it 'redirects to question' do
-        expect { delete :destroy, params: { id: answer, user: user } }
-        redirect_to question_path(answer.question)
+
+      context 'other answer' do
+        let!(:answer) { create :answer, user: create(:user) }
+
+        it 'does not deletes the answer' do
+          expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+        end
+    
+        it 'redirects to question' do
+          delete :destroy, params: { id: answer }
+          expect(response).to redirect_to question_path(assigns(:answer).question)
+        end
       end
     end
 
@@ -183,11 +198,11 @@ RSpec.describe AnswersController, type: :controller do
       let!(:answer) { create :answer, user: user }
 
       it 'does not deletes the answer' do
-        expect { delete :destroy, params: { id: answer, user: user } }.to_not change(Answer, :count)
+        expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
       end
 
       it 'redirect to sign in page' do
-        delete :destroy, params: { id: answer, user: user }
+        delete :destroy, params: { id: answer }
         expect(response).to redirect_to new_user_session_path
       end
     end
