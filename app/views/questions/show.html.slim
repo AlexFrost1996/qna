@@ -2,5 +2,7 @@ h1= @question.title
 p= @question.body
 - if current_user&.author_of?(@question)
     = link_to 'Delete question', question_path(@question), method: :delete
-= render partial: 'answers/answer', collection: @answers
+
+.answers
+  = render @question.answers
 = render 'answers/form'

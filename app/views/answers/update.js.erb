@@ -1,0 +1,6 @@
+$('.answers .answer-error-<%= @answer.id %>').html('<%= render 'shared/errors', resource: @answer %>');
+
+<% unless @answer.errors.present? %>
+  $('.answers .answer-id-<%= @answer.id %>').remove();
+  $('.answers').html('<%= j render @question.answers %>');
+<% end %>

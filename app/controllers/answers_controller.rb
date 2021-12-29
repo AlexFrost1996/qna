@@ -1,16 +1,20 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: %i[create destroy]
+  before_action :authenticate_user!, only: %i[create update destroy]
   before_action :find_question, only: %i[create]
   before_action :load_answer, only: %i[update destroy]
 
   def create
-    @answer = @question.answers.new(answer_params)
+    @answer = @question.answers.create(answer_params)
     @answer.user = current_user
+    @answer.save
+  end
 
-    if @answer.save
-      redirect_to question_path(@question), notice: 'Your answer successfully created.'
+  def update
+    @question = @answer.question
+    if current_user&.author_of?(@answer)
+      @answer.update(answer_params)
     else
-      render template: 'questions/show'
+      redirect_to question_path(@answer.question), notice: 'You are not permitted.'
     end
   end
 
