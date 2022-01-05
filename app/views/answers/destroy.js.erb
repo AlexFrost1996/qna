@@ -1,0 +1,5 @@
+$('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
+
+<% if @answer.destroyed? %>
+  $('.answers .answer-id-<%= @answer.id %>').remove();
+<% end %>

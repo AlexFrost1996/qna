@@ -1,26 +1,34 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: %i[create destroy]
+  before_action :authenticate_user!, only: %i[create update destroy best]
   before_action :find_question, only: %i[create]
-  before_action :load_answer, only: %i[update destroy]
+  before_action :load_answer, only: %i[update destroy best]
 
   def create
-    @answer = @question.answers.new(answer_params)
+    @answer = @question.answers.create(answer_params)
     @answer.user = current_user
+    @answer.save
+  end
 
-    if @answer.save
-      redirect_to question_path(@question), notice: 'Your answer successfully created.'
+  def update
+    @question = @answer.question
+    if current_user&.author_of?(@answer)
+      @answer.update(answer_params)
     else
-      render template: 'questions/show'
+      redirect_to question_path(@answer.question), notice: 'You are not permitted.'
     end
   end
 
   def destroy
     if current_user&.author_of?(@answer)
       @answer.destroy
-      redirect_to question_path(@answer.question), notice: 'Your answer successfully deleted.'
     else
       redirect_to question_path(@answer.question), notice: 'You cannot delete the wrong answer.'
     end
+  end
+
+  def best
+    @question = @answer.question
+    @answer.set_the_best if current_user.author_of?(@question)
   end
 
   private

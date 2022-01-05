@@ -7,29 +7,40 @@ feature 'User can delete his answer' do
   given!(:question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question, user: user) }
 
-  describe 'Aunthenticated user' do
-    scenario 'can delete his answer' do
+  describe 'Aunthenticated user', js: true do
+    scenario 'can delete his answer'  do
       sign_in(user)
       visit root_path
       click_on question.title
-      click_on 'Delete answer'
-      expect(page).to have_content 'Your answer successfully deleted.'
-      expect(page).to_not have_content answer.body
+
+      within '.answers' do
+        expect(page).to have_content answer.body
+        
+        click_on 'Delete answer'
+        
+        expect(page).to_not have_content answer.body
+      end
     end
 
     scenario "could not delete another user's answer" do
       sign_in(second_user)
       visit root_path
       click_on question.title
-      expect(page).to_not have_content 'Delete answer'
+
+      within '.answers' do
+        expect(page).to_not have_content 'Delete answer'
+      end
     end
   end
 
-  describe 'Unauthenticated user' do
+  describe 'Unauthenticated user', js: true do
     scenario 'could not delete answers' do
       visit root_path
       click_on question.title
-      expect(page).to_not have_content 'Delete answer'
+
+      within '.answers' do
+        expect(page).to_not have_content 'Delete answer'
+      end
     end
   end
 end
