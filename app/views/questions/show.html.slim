@@ -4,10 +4,14 @@
     = @question.title
   .q-body
     = @question.body
+  .q-file
+  - if @question.file.attached?
+    = link_to @question.file.filename.to_s, url_for(@question.file)
+
   - if current_user&.author_of?(@question)
     .question-controls
-      = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: @question.id }
-      = link_to 'Delete question', question_path(@question), method: :delete
+      p= link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: @question.id }
+      p= link_to 'Delete question', question_path(@question), method: :delete
 
       = form_with model: @question, local: false, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
         = f.label :title, 'Title'
