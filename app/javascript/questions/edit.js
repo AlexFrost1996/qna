@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function(){
-  $('.question-controls').on('click', '.edit-question-link', function(e) {
+  $('.question-container').on('click', '.edit-question-link', function(e) {
     e.preventDefault();
     $(this).hide();
     var questionId = $(this).data('questionId');
