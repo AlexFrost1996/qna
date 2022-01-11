@@ -8,20 +8,80 @@ feature 'User can add links to question', %q{
 
   given(:user) { create(:user) }
   given(:gist_url) { 'https://gist.github.com/AlexFrost1996/0373426e6293f14c15038cf29415f0e9' }
+  given(:google_url) { 'https://google.com' }
 
-  scenario 'User adds link when asks question' do
-    sign_in(user)
-    visit new_question_path
+  describe 'Authenticated user add links to question', js: true do
+    background do
+      sign_in(user)
+      visit new_question_path
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'text text text'
+      click_on 'add link'
+      fill_in 'Link name', with: 'My gist'
+      fill_in 'Link url', with: google_url
+    end
 
-    fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'text text text'
+    scenario 'User add one link when asks question' do
+      click_on 'Ask'
+      expect(page).to have_link 'My gist', href: google_url
+    end
 
-    fill_in 'Link name', with: 'My gist'
-    fill_in 'Url', with: gist_url
+    scenario 'User add two links when asks question' do
+      click_on 'add link'
 
-    click_on 'Ask'
+      within all('.nested-fields').last do
+        fill_in 'Link name', with: 'Google'
+        fill_in 'Link url', with: 'https://google.com'
+      end
 
-    expect(page).to have_link 'My gist', href: gist_url
+      click_on 'Ask'
+
+      expect(page).to have_link 'My gist', href: google_url
+      expect(page).to have_link 'Google', href: 'https://google.com'
+    end
+
+    scenario 'User add link with invalid url when asks question' do
+      fill_in 'Link url', with: 'wrong_url/add'
+      click_on 'Ask'
+
+      expect(page).to_not have_link 'My gist', href: 'wrong_url/add'
+    end
+
+    scenario 'User adds one link when editing his answer' do
+      click_on 'Ask'
+      click_on 'Edit'
+
+      within '.question' do
+        click_on 'add link'
+        fill_in 'Link name', with: 'Added Link'
+        fill_in 'Link url', with: 'https://qwerty.ua'
+      end
+
+      click_on 'Save'
+
+      expect(page).to have_link 'Added Link', href: 'https://qwerty.ua'
+    end
+
+    scenario 'User adds two links when editing his answer' do
+      click_on 'Ask'
+      click_on 'Edit'
+
+      within '.question' do
+        click_on 'add link'
+        fill_in 'Link name', with: 'Link-One'
+        fill_in 'Link url', with: 'https://one.pl'
+        click_on 'add link'
+
+        within all('.nested-fields').last do
+          fill_in 'Link name', with: 'Link-Two'
+          fill_in 'Link url', with: 'https://two.cz'
+        end
+      end
+
+      click_on 'Save'
+
+      expect(page).to have_link 'Link-One', href: 'https://one.pl'
+      expect(page).to have_link 'Link-Two', href: 'https://two.cz'
+    end
   end
-
 end
