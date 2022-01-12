@@ -15,13 +15,13 @@ feature 'User can edit his question' do
     context 'with valid attributes' do
       scenario 'can edit his question' do
 
-        within '.question-controls' do
+        within '.question' do
           click_on 'Edit'
           fill_in 'Title', with: '123'
           fill_in 'Body', with: '456'
           click_on 'Save'
         end
-
+        
         expect(page).to_not have_content question.title
         expect(page).to_not have_content question.body
         expect(page).to have_content '123'
@@ -32,14 +32,14 @@ feature 'User can edit his question' do
         visit question_path(other_question)
 
         expect(page).to_not have_link "Edit"
-        expect(page).to_not have_selector "question-controls"
+        expect(page).to_not have_selector ".edit-question-link"
       end
     end
 
     context 'with invalid attributes' do
       scenario "can't edit his question" do
 
-        within '.question-controls' do
+        within '.question' do
           click_on 'Edit'
           fill_in 'Title', with: ''
           fill_in 'Body', with: ''
@@ -48,6 +48,38 @@ feature 'User can edit his question' do
 
         expect(page).to have_content "Title can't be blank"
         expect(page).to have_content "Body can't be blank"
+      end
+    end
+
+    context 'attachments' do
+      background do
+        within '.question' do
+          click_on 'Edit'
+          attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+          click_on 'Save'
+        end
+      end
+
+      scenario 'add attachments' do
+        within '.question' do
+          expect(page).to have_link 'rails_helper.rb'
+          expect(page).to have_link 'spec_helper.rb'
+        end
+      end
+      
+      scenario 'delete attachments' do
+        within '.question' do
+          first('.attachment').click_on 'Delete file'
+          expect(page).to_not have_link 'rails_helper.rb'
+          expect(page).to have_link 'spec_helper.rb'
+        end
+      end
+
+      scenario "can't delete other user's attachments" do
+        visit question_path(other_question)
+        within '.question' do
+          expect(page).to_not have_link 'Delete file'
+        end
       end
     end
   end
