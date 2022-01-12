@@ -1,12 +1,6 @@
 .answer class=["answer-id-#{answer.id}" " #{answer.best? ? 'the-best-answer' : ''}"]
   p 
     = answer.body
-
-  p
-    - if answer.files.attached?
-      - answer.files.each do |file|
-        = link_to file.filename.to_s, url_for(file)
-
     - if current_user&.author_of?(answer)
       = link_to 'Delete answer', answer_path(answer), method: :delete
       = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
@@ -17,11 +11,6 @@
     div class=["answer-error-#{answer.id}"]
 
     = form_with model: answer, local: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
-      p
-        = f.label :body, 'Your answer'
-        = f.text_area :body
-      p
-        = f.label :files
-        = f.file_field :files, multiple: true
-
-      p= f.submit 'Save' 
+      = f.label :body, 'Your answer'
+      = f.text_area :body
+      = f.submit 'Save' 
