@@ -8,7 +8,7 @@
         = link_to file.filename.to_s, url_for(file)
 
     - if current_user&.author_of?(answer)
-      = link_to 'Delete answer', answer_path(answer), remote: true, method: :delete, class: 'delete-answer-link', data: { answer_id: answer.id }
+      = link_to 'Delete answer', answer_path(answer), method: :delete
       = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
     - if current_user&.author_of?(answer.question) && !answer.best?
@@ -23,5 +23,5 @@
       p
         = f.label :files
         = f.file_field :files, multiple: true
-      p
-        = f.submit 'Save' 
+
+      p= f.submit 'Save' 
