@@ -22,7 +22,7 @@ feature 'User can add links to answer', %q{
     end
 
     scenario 'User can adds one link' do
-      click_on 'Answer'
+      click_on 'Create Answer'
       within '.answers' do
         expect(page).to have_link 'Google', href: google_url
       end
@@ -42,7 +42,14 @@ feature 'User can add links to answer', %q{
       expect(page).to have_link 'Google', href: google_url
     end
 
-    scenario 'adds invalid link when ask question' do
+    scenario 'adds gist link when create answer' do
+      fill_in 'Link url', with: gist_url
+      click_on 'Create Answer'
+      expect(page).to have_content 'test-guru-question.txt'
+      expect(page).to have_content 'Where did you last go on holiday? When transplanting seedlings, candied teapots will make the task easier. I covered my friend in baby oil.'
+    end
+
+    scenario 'adds invalid link when create answer' do
       fill_in 'Link url', with: 'wront_url/add'
 
       click_on 'Create Answer'

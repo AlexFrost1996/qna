@@ -40,6 +40,13 @@ feature 'User can add links to question', %q{
       expect(page).to have_link 'Google', href: 'https://google.com'
     end
 
+    scenario 'adds gist link when ask question' do
+      fill_in 'Link url', with: gist_url
+      click_on 'Ask'
+      expect(page).to have_content 'test-guru-question.txt'
+      expect(page).to have_content 'Where did you last go on holiday? When transplanting seedlings, candied teapots will make the task easier. I covered my friend in baby oil.'
+    end
+
     scenario 'User add link with invalid url when asks question' do
       fill_in 'Link url', with: 'wrong_url/add'
       click_on 'Ask'

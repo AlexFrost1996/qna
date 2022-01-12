@@ -3,10 +3,12 @@
     = answer.body
 
   .links
-    p Links:
-    ul
-      - answer.links.each do |link|
-        li= link_to link.name, link.url
+    - answer.links.each do |link|
+      div id="link-#{link.id}"
+        .link
+          = link_to link.name, link.url
+        - if current_user&.author_of?(answer)
+          = link_to 'Delete link', link_path(link), method: :delete, remote: true
   
   p
     - if answer.files.attached?
