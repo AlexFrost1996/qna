@@ -5,6 +5,10 @@
   .q-body
     p= @question.body
 
+  - if @question.award.present?
+    h3 Award:
+    = image_tag url_for(@question.award.image)
+
   .links   
     - @question.links.each do |link|
         div id="link-#{link.id}"
