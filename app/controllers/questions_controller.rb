@@ -44,10 +44,10 @@ class QuestionsController < ApplicationController
   private
 
   def load_question
-    @question = Question.with_attached_files.find(params[:id])
+    @question = Question.find(params[:id])
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [])
+    params.require(:question).permit(:title, :body, :file)
   end
 end

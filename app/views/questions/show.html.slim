@@ -5,9 +5,8 @@
   .q-body
     = @question.body
   .q-file
-  - if @question.files.attached?
-    - @question.files.each do |file|
-      p= link_to file.filename.to_s, url_for(file)
+  - if @question.file.attached?
+    = link_to @question.file.filename.to_s, url_for(@question.file)
 
   - if current_user&.author_of?(@question)
     .question-controls
