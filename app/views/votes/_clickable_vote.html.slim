@@ -1,0 +1,19 @@
+.like
+  - @vote = vote(current_user, votable)
+  = link_to send("like_#{votable.class.to_s.downcase}_path", votable), class: 'vote vote-up', method: :post, remote: true do
+    span
+      | like
+    - if @vote&.like?
+      i.fa.fa-thumbs-up class="fa-lg"
+    - else
+      i.fa.fa-thumbs-o-up class="fa-lg"
+.rating 
+  = votable.rating
+.dislike
+  = link_to send("dislike_#{votable.class.to_s.downcase}_path", votable), class: 'vote vote-down', method: :post, remote: true do
+    span
+      | dislike
+    - if @vote&.dislike?
+      i.fa.fa-thumbs-down class="fa-lg"
+    - else
+      i.fa.fa-thumbs-o-down class="fa-lg"

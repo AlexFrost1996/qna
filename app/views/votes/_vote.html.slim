@@ -1,0 +1,6 @@
+.votes
+  .wrapper
+    - if user_signed_in? && !current_user&.author_of?(votable) 
+      = render partial: 'votes/clickable_vote', locals: { votable: votable }
+    - else
+      = render partial: 'votes/not_clickable_vote', locals: { votable: votable }
