@@ -13,5 +13,25 @@
       = f.label :files
       = f.file_field :files, multiple: true
 
+    .award
+      h4 Award:
+      = f.fields_for :award do |w|
+        .field
+          = w.label :title, 'Award title'
+          br
+          = w.text_field :title
+        .field
+          = w.label :image
+          br
+          = w.file_field :image, direct_upload: true
+
+    p Links:
+    #question_links
+      = f.fields_for :links do |link|
+
+      .links
+        = link_to_add_association 'add link', f, :links,
+          partial: 'links/link_fields'
+    
     p
       = f.submit 'Ask'

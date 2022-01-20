@@ -3,4 +3,6 @@ $('.question-error').html('<%= render 'shared/errors', resource: @question %>');
 <% if !@question.errors.present? %>
   $('.question-container .question').remove();
   $('.question-container').append('<%= j render @question %>');
+  var event = new Event('gist:updated');
+  document.dispatchEvent(event);
 <% end %>

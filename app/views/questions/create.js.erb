@@ -1,1 +1,3 @@
 $('.question-errors').html('<%= render 'shared/errors', resource: @question %>'); 
+var event = new Event('gist:updated');
+document.dispatchEvent(event);

@@ -1,0 +1,7 @@
+h4 Awards
+- @awards.each do |award|
+  h1 = award.question.title
+  p
+    = image_tag url_for(award.image)
+  p
+    = award.title
