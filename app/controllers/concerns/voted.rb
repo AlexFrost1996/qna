@@ -27,21 +27,21 @@ module Voted
     @vote = @votable.votes.find_by(user: current_user)
   end
 
-  def click_processing(click)
+  def click_processing(action)
     if !@vote.present?
-      create_vote(click)
-    elsif @vote.send("#{click}?")
+      create_vote(action)
+    elsif @vote.send("#{action}?")
       @vote.click = nil
       @vote.destroy
       render_votable
     else
       @vote.destroy
-      create_vote(click)
+      create_vote(action)
     end
   end
 
-  def create_vote(click)
-    @vote = @votable.votes.new(user: current_user, click: click)
+  def create_vote(action)
+    @vote = @votable.votes.new(user: current_user, click: action)
     if @vote.save
       render_votable
     else

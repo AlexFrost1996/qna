@@ -1,6 +1,6 @@
 .like
   - @vote = vote(current_user, votable)
-  = link_to send("like_#{votable.class.to_s.downcase}_path", votable), class: 'vote vote-up', method: :post, remote: true do
+  = link_to polymorphic_path([:like, votable]), class: 'vote vote-up', method: :post, remote: true do
     span
       | like
     - if @vote&.like?
@@ -10,7 +10,7 @@
 .rating 
   = votable.rating
 .dislike
-  = link_to send("dislike_#{votable.class.to_s.downcase}_path", votable), class: 'vote vote-down', method: :post, remote: true do
+  = link_to polymorphic_path([:dislike, votable]), class: 'vote vote-down', method: :post, remote: true do
     span
       | dislike
     - if @vote&.dislike?
