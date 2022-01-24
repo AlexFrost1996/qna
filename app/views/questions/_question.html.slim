@@ -1,4 +1,4 @@
-.question
+.question class=["question-id-#{@question.id}"]
   .question-error
   .q-title
     h1= @question.title
@@ -8,6 +8,8 @@
   - if @question.award.present?
     h3 Award:
     = image_tag url_for(@question.award.image)
+
+  = render partial: 'votes/vote', locals: { votable: @question }
 
   .links   
     - @question.links.each do |link|

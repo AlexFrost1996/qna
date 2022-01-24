@@ -2,6 +2,8 @@
   p 
     = answer.body
 
+  = render partial: 'votes/vote', locals: { votable: answer }
+  
   .links
     - answer.links.each do |link|
       div id="link-#{link.id}"
