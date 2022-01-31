@@ -13,3 +13,7 @@ require("jquery")
 require("@nathanvda/cocoon")
 require("links/renderGist")
 require("votes/vote")
+// Support component names relative to this directory:
+var componentRequireContext = require.context("components", true);
+var ReactRailsUJS = require("react_ujs");
+ReactRailsUJS.useContext(componentRequireContext);

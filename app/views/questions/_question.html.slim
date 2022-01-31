@@ -9,8 +9,6 @@
     h3 Award:
     = image_tag url_for(@question.award.image)
 
-  = render partial: 'votes/vote', locals: { votable: @question }
-
   .links   
     - @question.links.each do |link|
         div id="link-#{link.id}"
@@ -21,12 +19,15 @@
 
   - if @question.files.attached?
     - @question.files.each do |file|
-        p.attachment id="file-#{file.id}"
+        .attachment id="file-#{file.id}"
           = link_to file.filename.to_s, url_for(file)
-          = link_to 'Delete file', file_path(file), method: :delete, remote: true
+          - if current_user&.author_of?(@question)
+            = link_to 'Delete file', file_path(file), method: :delete, remote: true
+  
+  = render partial: 'votes/vote', locals: { votable: @question }
 
   - if current_user&.author_of?(@question)
-    .question-controls
+    .q-controls
       = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: @question.id }
       = link_to 'Delete question', question_path(@question), method: :delete
 
@@ -40,10 +41,9 @@
         p
           = f.label :files
           = f.file_field :files, multiple: true
-        
         p
           = f.fields_for :links do |link|
-
+        
           .links
             = link_to_add_association 'add link', f, :links,
               partial: 'links/link_fields'

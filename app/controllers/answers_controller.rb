@@ -4,6 +4,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, only: %i[create update destroy best]
   before_action :find_question, only: %i[create]
   before_action :load_answer, only: %i[update destroy best]
+  after_action :publish_answer, only: %i[create]
 
   def create
     @answer = @question.answers.create(answer_params)
@@ -47,5 +48,11 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(:body, files: [],
                                     links_attributes: [:name, :url],
                                     award_attributes: [:title, :image])
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+
+    ActionCable.server.broadcast("answers_for_question_#{@question.id}", AnswerSerializer.new(@answer).as_json)
   end
 end
