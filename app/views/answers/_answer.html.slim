@@ -2,8 +2,6 @@
   p 
     = answer.body
 
-  = render partial: 'votes/vote', locals: { votable: answer }
-  
   .links
     - answer.links.each do |link|
       div id="link-#{link.id}"
@@ -15,18 +13,22 @@
   p
     - if answer.files.attached?
       - answer.files.each do |file|
-         p.attachment id="file-#{file.id}"
-          = link_to file.filename.to_s, url_for(file)
-          = link_to 'Delete file', file_path(file), method: :delete, remote: true
+          p.attachment id="file-#{file.id}"
+            = link_to file.filename.to_s, url_for(file)
+            - if current_user&.author_of?(answer)
+              = link_to 'Delete file', file_path(file), method: :delete, remote: true
 
-    - if current_user&.author_of?(answer)
+  = render partial: 'votes/vote', locals: { votable: answer }
+
+  - if current_user&.author_of?(answer.question) && !answer.best?
+    = link_to 'The Best Answer', best_answer_path(answer), remote: true, method: :patch, class: 'best-answer-link', data: { answer_id: answer.id }
+
+  - if current_user&.author_of?(answer)
+    .a-controls
       = link_to 'Delete answer', answer_path(answer), remote: true, method: :delete, class: 'delete-answer-link', data: { answer_id: answer.id }
       = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-
-    - if current_user&.author_of?(answer.question) && !answer.best?
-      = link_to 'The Best Answer', best_answer_path(answer), remote: true, method: :patch, class: 'best-answer-link', data: { answer_id: answer.id }
-
-    div class=["answer-error-#{answer.id}"]
+  
+  div class=["answer-error-#{answer.id}"]
 
     = form_with model: answer, local: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
       p
@@ -38,10 +40,10 @@
       
       p
         = f.fields_for :links do |link|
-
+          
         .links
           = link_to_add_association 'add link', f, :links,
             partial: 'links/link_fields'
-      
+
       p
         = f.submit 'Save' 

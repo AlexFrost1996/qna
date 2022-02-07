@@ -3,6 +3,7 @@ import axios from 'axios'
 import { getMeta } from '../../utils/getMeta'
 import Link from './components/link'
 import File from './components/file'
+import Votes from './components/votes'
 
 class Answer extends React.Component {
 
@@ -90,6 +91,13 @@ class Answer extends React.Component {
     )
   }
 
+  renderVotes = () => {
+    const { id } = this.props.data
+    return (
+      <Votes votableId={id} />
+    )
+  }
+
   render() {
     console.log("data", this.props.data)
     const { body, id } = this.props.data
@@ -99,6 +107,7 @@ class Answer extends React.Component {
         {this.renderLinks()}
         {this.renderFiles()}
         {this.renderSetTheBest()}
+        {this.renderVotes()}
       </div>
     )
   }

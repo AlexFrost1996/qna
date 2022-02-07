@@ -3,7 +3,7 @@ import Question from "../components/question"
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-consumer.subscriptions.create("QuestionChannel", {
+consumer.subscriptions.create("QuestionsChannel", {
   connected() {
     this.perform("follow")
   },
