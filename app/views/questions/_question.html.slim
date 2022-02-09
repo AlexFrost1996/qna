@@ -50,3 +50,8 @@
         
         p
           = f.submit 'Save'
+
+  = render partial: 'comments/form', locals: { commentable: @question }
+  
+  .comments
+    = render @question.comments

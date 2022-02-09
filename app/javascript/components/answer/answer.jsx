@@ -3,6 +3,7 @@ import axios from 'axios'
 import { getMeta } from '../../utils/getMeta'
 import Link from './components/link'
 import File from './components/file'
+import CommentForm from './components/commentForm'
 import Votes from './components/votes'
 
 class Answer extends React.Component {
@@ -77,8 +78,8 @@ class Answer extends React.Component {
   }
 
   renderSetTheBest = () => {
+    if (gon.question_owner != gon.current_user) { return null }
     const { id } = this.props.data
-    const bestLink = `/answers/${id}/best`
 
     return (
       <button 
@@ -91,6 +92,17 @@ class Answer extends React.Component {
     )
   }
 
+  renderNewComment = () => {
+    const commentableType = 'answers'
+    const { id } = this.props.data
+    return (
+      <CommentForm
+        commentableId={id}
+        commentableType={commentableType}
+      />
+    )
+  }
+
   renderVotes = () => {
     const { id } = this.props.data
     return (
@@ -99,7 +111,6 @@ class Answer extends React.Component {
   }
 
   render() {
-    console.log("data", this.props.data)
     const { body, id } = this.props.data
     return(
       <div className={`answer answer-id-${id}`}>
@@ -108,6 +119,8 @@ class Answer extends React.Component {
         {this.renderFiles()}
         {this.renderSetTheBest()}
         {this.renderVotes()}
+        {this.renderNewComment()}
+        <div className="comments"/>
       </div>
     )
   }

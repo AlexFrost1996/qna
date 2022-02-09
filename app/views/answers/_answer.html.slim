@@ -30,6 +30,12 @@
   
   div class=["answer-error-#{answer.id}"]
 
+  = render partial: 'comments/form', locals: { commentable: answer }
+
+  .comments
+    = render answer.comments
+  
+  p
     = form_with model: answer, local: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
       p
         = f.label :body, 'Your answer'
