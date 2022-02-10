@@ -1,0 +1,8 @@
+.comment class=["comment-id-#{comment.id}"]
+  .head
+    .email
+      = comment.user.email
+    .date
+      = comment.created_at
+  .text
+    = comment.text

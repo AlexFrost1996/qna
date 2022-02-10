@@ -1,4 +1,4 @@
-$(document).on('turbolinks:load', function(){
+function vote() {
   $('.votes').on('ajax:success', function(e) {
     var vote = e.detail[0];
     $(`.${vote.model}-id-${vote.votable_id} .votes .rating`).html(`${vote.rating}`)
@@ -27,9 +27,21 @@ $(document).on('turbolinks:load', function(){
   })
     .on('ajax:error', function(e) {
       var errors = e.detail[0];
-
+      
       $.each(errors, function(index, value) {
-        $('p.notice').append(`<div class="flash-alert">${value}</div>`)
+        $('div.notice').append(`<div class="flash-error flash-alert">${value}</div>`)
       })
     })
+}
+
+$(document).on('turbolinks:load', function(){
+  vote()
+});
+
+document.addEventListener('best:updated', function() {
+  vote()
+});
+
+document.addEventListener('wsAnswer:added', function() {
+  vote()
 });

@@ -1,3 +1,5 @@
 <% if @answer.persisted? %>
   $('.answers').html('<%= j render @question.answers %>');
+  var event = new Event('best:updated');
+  document.dispatchEvent(event);
 <% end %>

@@ -1,0 +1,11 @@
+- if current_user.present?
+  .new-comment
+    .comment-errors
+      = render 'shared/errors', resource: commentable
+
+    = form_with model: [commentable, Comment.new], remote: true, html: { id: "new-#{commentable.class.to_s.downcase}-comment-#{commentable.id}" } do |f|
+      p
+        = f.label :text, 'Comment'
+        = f.text_area :text
+
+      = f.submit 'Send'
