@@ -38,6 +38,9 @@ gem 'validate_url'
 gem 'font-awesome-rails'
 gem 'active_model_serializers', '~> 0.10.0', require: true
 gem 'gon'
+gem 'omniauth'
+gem 'omniauth-github'
+gem "omniauth-rails_csrf_protection"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
