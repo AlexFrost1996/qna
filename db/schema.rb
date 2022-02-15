@@ -54,13 +54,14 @@ ActiveRecord::Schema.define(version: 2022_02_14_153044) do
     t.index ["user_id"], name: "index_answers_on_user_id"
   end
 
-  create_table "autorizations", force: :cascade do |t|
+  create_table "authorizations", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "provider"
     t.string "uid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_autorizations_on_user_id"
+    t.index ["provider", "uid"], name: "index_authorizations_on_provider_and_uid"
+    t.index ["user_id"], name: "index_authorizations_on_user_id"
   end
 
   create_table "awards", force: :cascade do |t|
@@ -130,7 +131,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_153044) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
-  add_foreign_key "autorizations", "users"
+  add_foreign_key "authorizations", "users"
   add_foreign_key "awards", "answers"
   add_foreign_key "awards", "questions"
   add_foreign_key "comments", "users"

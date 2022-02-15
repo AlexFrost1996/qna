@@ -12,6 +12,8 @@ module Qna
     config.load_defaults 6.1
     config.token_secret_signature_key = -> { Rails.application.credentials.read }
 
+    config.autoload_paths += [config.root.join('app')]
+
     config.generators do |g|
       g.test_framework :rspec,
                         view_specs: false,
