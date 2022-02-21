@@ -38,6 +38,13 @@ gem 'validate_url'
 gem 'font-awesome-rails'
 gem 'active_model_serializers', '~> 0.10.0', require: true
 gem 'gon'
+gem 'omniauth', '~> 2.0'
+gem 'omniauth-github', '~> 2.0'
+gem 'omniauth-twitter', '~> 1.4'
+gem 'omniauth-facebook', '~> 9.0'
+gem 'omniauth-vkontakte', '~> 1.7'
+gem 'omniauth-rails_csrf_protection', '~> 1.0'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -55,6 +62,7 @@ group :development do
   gem 'listen', '~> 3.3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  gem 'letter_opener'
 end
 
 group :test do
@@ -67,6 +75,7 @@ group :test do
   gem 'rails-controller-testing'
   gem 'launchy'
   gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
+  gem 'capybara-email'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

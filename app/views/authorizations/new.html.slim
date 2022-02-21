@@ -1,0 +1,12 @@
+p = 'Enter email address for confirm registration'
+
+p
+  = form_with model: @authorization, url: authorization_path, method: :post do |f|
+    = f.label :email
+    = f.email_field :email, autofocus: true, autocomplete: "email" 
+
+    .hidden
+      = f.text_field :provider, value: params['provider']
+      = f.text_field :uid, value: params['uid']
+
+    = f.submit 'Send'
