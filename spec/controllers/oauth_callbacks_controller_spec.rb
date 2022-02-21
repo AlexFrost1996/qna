@@ -14,22 +14,24 @@ RSpec.describe OauthCallbacksController, type: :controller do
 
   describe 'Facebook' do
     it_behaves_like 'provider OAuth' do
-      let(:oauth_data) { OmniAuth::AuthHash.new(provider: 'facebook', uid: 123) }
+      let(:oauth_data) { OmniAuth::AuthHash.new(provider: 'facebook', uid: 123, info: {}) }
       let(:provider) { 'facebook' }
     end
   end
 
   describe 'Twitter' do
-    it_behaves_like 'provider OAuth' do
-      let(:oauth_data) { OmniAuth::AuthHash.new(provider: 'twitter', uid: 123) }
-      let(:provider) { 'twitter' }
-    end
+    let!(:provider) { 'twitter' }
+    let!(:oauth_data) { OmniAuth::AuthHash.new(provider: 'twitter', uid: 123) }
+
+    it_behaves_like 'provider OAuth'
+    it_behaves_like 'not provided email'
   end
 
   describe 'Vkontakte' do
-    it_behaves_like 'provider OAuth' do
-      let(:oauth_data) { OmniAuth::AuthHash.new(provider: 'vkontakte', uid: 123) }
-      let(:provider) { 'vkontakte' }
-    end
+    let!(:oauth_data) { OmniAuth::AuthHash.new(provider: 'vkontakte', uid: 123, info: {}) }
+    let!(:provider) { 'vkontakte' }
+
+    it_behaves_like 'provider OAuth'
+    it_behaves_like 'not provided email'
   end
 end
