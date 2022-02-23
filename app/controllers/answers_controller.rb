@@ -7,31 +7,27 @@ class AnswersController < ApplicationController
   after_action :publish_answer, only: %i[create]
 
   def create
+    authorize Answer
     @answer = @question.answers.create(answer_params)
     @answer.user = current_user
     @answer.save
   end
 
   def update
+    authorize @answer
     @question = @answer.question
-    if current_user&.author_of?(@answer)
-      @answer.update(answer_params)
-    else
-      redirect_to question_path(@answer.question), notice: 'You are not permitted.'
-    end
+    @answer.update(answer_params)
   end
 
   def destroy
-    if current_user&.author_of?(@answer)
-      @answer.destroy
-    else
-      redirect_to question_path(@answer.question), notice: 'You cannot delete the wrong answer.'
-    end
+    authorize @answer
+    @answer.destroy
   end
 
   def best
     @question = @answer.question
-    @answer.set_the_best if current_user.author_of?(@question)
+    authorize @question
+    @answer.set_the_best
   end
 
   private

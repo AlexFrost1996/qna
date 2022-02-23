@@ -174,30 +174,15 @@ RSpec.describe QuestionsController, type: :controller do
     context 'Authenticated user' do
       before { login(user) }
 
-      context "user's question" do
-        let!(:question) { create(:question, user: user) }
+      let!(:question) { create(:question, user: user) }
 
-        it 'deletes the question' do
-          expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
-        end
-    
-        it 'redirects to index' do
-          expect { delete :destroy, params: { id: question } }
-          redirect_to questions_path
-        end
+      it 'deletes the question' do
+        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
       end
-
-      context 'other questions' do
-        let!(:question) { create(:question, user: create(:user)) }
-
-        it 'does not deletes the question' do
-          expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
-        end
-    
-        it 'redirects to root page' do
-          delete :destroy, params: { id: question }
-          expect(response).to redirect_to root_path
-        end
+  
+      it 'redirects to index' do
+        expect { delete :destroy, params: { id: question } }
+        redirect_to questions_path
       end
     end
 
