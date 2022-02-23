@@ -3,6 +3,7 @@ class CommentsController < ApplicationController
   before_action :find_commentable
 
   def create
+    authorize Comment
     @comment = @commentable.comments.new(comment_params)
     @comment.user_id = current_user.id
 

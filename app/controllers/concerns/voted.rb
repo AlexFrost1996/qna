@@ -21,6 +21,7 @@ module Voted
 
   def find_votable
     @votable = model_klass.find(params['id'])
+    authorize @votable, :vote?, policy_class: VotePolicy
   end
 
   def find_vote
@@ -31,10 +32,12 @@ module Voted
     if !@vote.present?
       create_vote(action)
     elsif @vote.send("#{action}?")
+      authorize_cancel_vote
       @vote.click = nil
       @vote.destroy
       render_votable
     else
+      authorize_cancel_vote
       @vote.destroy
       create_vote(action)
     end
@@ -47,6 +50,10 @@ module Voted
     else
       render json: @vote.errors.messages, status: :unprocessable_entity
     end
+  end
+
+  def authorize_cancel_vote
+    authorize @vote, :cancel_vote?, policy_class: VotePolicy
   end
 
   def render_votable
