@@ -99,4 +99,209 @@ describe 'Questions API', type: :request do
       end
     end
   end
+
+  describe 'POST /api/v1/questions' do
+    let(:user) { create :user }
+    let(:access_token) { create :access_token }
+
+    let(:api_path) { '/api/v1/questions' }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :post }
+    end
+
+    context 'Authenticated user' do
+      context 'with valid attributes' do
+        let(:params) do
+          {
+            user_id: user.id,
+            title: 'Test question',
+            body: 'Question body',
+            links_attributes: [
+              {
+                name: 'Google',
+                url: 'https://google.com'
+              },
+              {
+                name: 'Youtube',
+                url: 'https://youtube.com'
+              }
+            ]
+          }
+        end
+
+        it 'saves a new question in the database' do
+          expect do
+            post api_path, params: { question: params, access_token: access_token.token }, headers: headers
+          end.to change(Question, :count).by(1)
+        end
+
+        it 'returns 200' do
+          post api_path, params: { question: params, access_token: access_token.token }, headers: headers
+          expect(response).to be_successful
+        end
+      end
+
+      context 'with invalid attributes' do
+        let(:params) do
+          {
+            user_id: user.id,
+            title: '',
+            body: '',
+            links_attributes: [
+              {
+                name: 'Google',
+                url: 'https://google.com'
+              },
+              {
+                name: 'Youtube',
+                url: 'https://youtube.com'
+              }
+            ]
+          }
+        end
+
+        it 'does not save the question' do
+          expect do
+            post api_path, params: { question: params, access_token: access_token.token }, headers: headers
+          end.to_not change(Question, :count)
+        end
+      end
+    end
+  end
+
+  describe 'PATH /api/v1/questions/:id' do
+    let(:user) { create :user }
+    let(:access_token) { create :access_token }
+    let(:question) { create :question, user: user }
+
+    let(:api_path) { "/api/v1/questions/#{question.id}" }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :patch }
+    end
+
+    context 'Authenticated user' do
+      context 'with valid attributes' do
+        let(:params) do
+          {
+            user_id: user.id,
+            title: 'new title',
+            body: 'new body',
+            links_attributes: [
+              {
+                name: 'Google',
+                url: 'https://google.com'
+              },
+              {
+                name: 'Youtube',
+                url: 'https://youtube.com'
+              }
+            ]
+          }
+        end
+
+        it 'changes question attributes' do
+          patch api_path, params: { question: params, access_token: access_token.token }, headers: headers
+          question.reload
+
+          expect(question.title).to eq 'new title'
+          expect(question.body).to eq 'new body'
+        end
+
+        it 'returns 200' do
+          patch api_path, params: { question: params, access_token: access_token.token }, headers: headers
+          expect(response).to be_successful
+        end
+
+        context 'with invalid attributes' do
+          let(:params) do
+            {
+              user_id: user.id,
+              title: '',
+              body: '',
+              links_attributes: [
+                {
+                  name: 'Google',
+                  url: 'https://google.com'
+                },
+                {
+                  name: 'Youtube',
+                  url: 'https://youtube.com'
+                }
+              ]
+            }
+          end
+
+          before { patch api_path, params: { question: params, access_token: access_token.token }, headers: headers }
+
+          it 'does not change question' do
+            question.reload
+            expect(question.title).to eq question.title
+            expect(question.body).to eq question.body
+          end
+        end
+      end
+    end
+
+    context 'Unauthenticated user' do
+      let(:other_user) { create :user }
+      let(:params) do
+        {
+          user_id: other_user.id,
+          title: 'new title',
+          body: 'new body',
+          links_attributes: [
+            {
+              name: 'Google',
+              url: 'https://google.com'
+            },
+            {
+              name: 'Youtube',
+              url: 'https://youtube.com'
+            }
+          ]
+        }
+      end
+
+      it 'deletes the question' do
+        patch api_path, params: { question: params, access_token: access_token.token }, headers: headers
+        expect(JSON.parse(response.body).first).to eq "You don't have permission to access on this server"
+      end
+    end
+  end
+
+  describe 'DELETE /api/v1/questions/:id' do
+    let(:user) { create :user }
+    let(:access_token) { create :access_token }
+    let!(:question) { create :question, user: user }
+
+    let(:api_path) { "/api/v1/questions/#{question.id}" }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :delete }
+    end
+
+    context 'Authenticated user' do
+      let(:params) do
+        { user_id: user.id }
+      end
+
+      it 'deletes the question' do
+        expect { delete api_path, params: { question: params, access_token: access_token.token }, headers: headers }.to change(Question, :count).by(-1)
+      end
+    end
+
+    context 'Unauthenticated user' do
+      let(:other_user) { create :user }
+      let(:params) do
+        { user_id: other_user.id }
+      end
+
+      it 'deletes the question' do
+        delete api_path, params: { question: params, access_token: access_token.token }, headers: headers
+        expect(JSON.parse(response.body).first).to eq "You don't have permission to access on this server"
+      end
+    end
+  end
 end

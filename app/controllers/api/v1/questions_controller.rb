@@ -16,9 +16,45 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     render json: @answers, each_serializer: Api::V1::AnswersSerializer
   end
 
+  def create
+    @current_user = User.find_by(id: question_params['user_id'])
+    authorize Question
+    @question = Question.new(question_params)
+
+    if @question.save
+      head :ok
+    else
+      render json: @question.errors.messages
+    end
+  end
+
+  def update
+    @current_user = User.find_by(id: question_params['user_id'])
+    authorize @question
+    if @question.update(question_params)
+      head :ok
+    else
+      render json: @question.errors.messages
+    end
+  end
+
+  def destroy
+    @current_user = User.find_by(id: question_params['user_id'])
+    authorize @question
+    if @question.destroy
+      head :ok
+    else
+      render json: @question.errors.messages
+    end
+  end
+
   private
 
   def load_question
-    @question = Question.find(params['id'])
+    @question = Question.find(params[:id])
+  end
+
+  def question_params
+    params.require(:question).permit(:title, :body, :user_id, links_attributes: %i[name url])
   end
 end

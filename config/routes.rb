@@ -14,6 +14,9 @@ Rails.application.routes.draw do
         get :index, on: :collection
         get :show, on: :collection
         get '/answers', to: 'questions#answers'
+        post :create
+        post :update
+        delete :destroy
       end
       resources :answers do
         get :show, on: :collection
