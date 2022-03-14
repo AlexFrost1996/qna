@@ -44,7 +44,7 @@ gem 'omniauth-twitter', '~> 1.4'
 gem 'omniauth-facebook', '~> 9.0'
 gem 'omniauth-vkontakte', '~> 1.7'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
-
+gem 'pundit'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

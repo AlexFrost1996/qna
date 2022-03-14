@@ -37,18 +37,14 @@ shared_examples 'voted controller' do
       before { login(author) }
       it 'can not vote' do
         post :like, params: { id: votable.id }, format: :json
-        resp = JSON.parse(response.body)
-        expect(resp['user'][0]).to eq "Author can't vote"
-        expect(response).to have_http_status(422)
+        expect(response.status).to eq 403
       end
     end
 
     context 'Unauthenticated user' do
       it 'can not dislikes likes' do
         post :like, params: { id: votable.id }, format: :json
-        resp = JSON.parse(response.body)
-        expect(response).to have_http_status(401)
-        expect(resp['error']).to eq 'You need to sign in or sign up before continuing.'
+        expect(response.status).to eq 403
       end
     end
   end
@@ -86,18 +82,14 @@ shared_examples 'voted controller' do
       before { login(author) }
       it 'can not vote' do
         post :like, params: { id: votable.id }, format: :json
-        resp = JSON.parse(response.body)
-        expect(resp['user'][0]).to eq "Author can't vote"
-        expect(response).to have_http_status(422)
+        expect(response.status).to eq 403
       end
     end
 
     context 'Unauthenticated user' do
       it 'can not dislikes' do
         post :dislike, params: { id: votable.id }, format: :json
-        resp = JSON.parse(response.body)
-        expect(response).to have_http_status(401)
-        expect(resp['error']).to eq 'You need to sign in or sign up before continuing.'
+        expect(response.status).to eq 403
       end
     end
   end

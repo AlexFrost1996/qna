@@ -78,9 +78,9 @@ RSpec.describe AnswersController, type: :controller do
             expect(answer.body).to_not eq 'new body'
           end
 
-          it 'renders question ' do
+          it 'return status forbidden' do
             patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
-            expect(response).to redirect_to question_path(assigns(:answer).question)
+            expect(response.status).to eq 403
           end
 
           it "is not answers user's" do
@@ -157,9 +157,9 @@ RSpec.describe AnswersController, type: :controller do
           expect { delete :destroy, params: { id: answer, question_id: question }, format: :js }.to_not change(Answer, :count)
         end
 
-        it 'redirects to question' do
+        it 'return status forbidden' do
           delete :destroy, params: { id: answer, question_id: question }, format: :js
-          expect(response).to redirect_to question_path(assigns(:answer).question)
+          expect(response.status).to eq 403
         end
       end
     end
@@ -205,9 +205,9 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer).to_not be_best
       end
 
-      it 'render best template' do
+      it 'return status forbidden' do
         patch :best, params: { id: answer }, format: :js
-        expect(response).to render_template :best
+        expect(response.status).to eq 403
       end
     end
   end

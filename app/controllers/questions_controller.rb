@@ -6,10 +6,12 @@ class QuestionsController < ApplicationController
   after_action :publish_question, only: %i[create]
 
   def index
+    authorize Question
     @questions = Question.all
   end
 
   def show
+    authorize Question
     @answer = Answer.new
     @answers = @question.answers
     @answer.links.new
@@ -22,12 +24,14 @@ class QuestionsController < ApplicationController
   end
 
   def new
+    authorize Question
     @question = Question.new
     @question.links.new
     @award = Award.new(question: @question)
   end
 
   def create
+    authorize Question
     @question = Question.new(question_params)
     @question.user = current_user
 
@@ -37,20 +41,14 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user&.author_of?(@question)
-      @question.update(question_params)
-    else
-      redirect_to question_path(@question), notice: 'You are not permitted.'
-    end
+    authorize @question
+    @question.update(question_params)
   end
 
   def destroy
-    if current_user&.author_of?(@question)
-      @question.destroy
-      redirect_to root_path, notice: 'Your question successfully deleted.'
-    else
-      redirect_to root_path, notice: 'You cannot delete the wrong question.'
-    end
+    authorize @question
+    @question.destroy
+    redirect_to root_path, notice: 'Your question successfully deleted.'
   end
 
   private
