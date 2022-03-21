@@ -86,6 +86,23 @@ RSpec.describe QuestionsController, type: :controller do
           post :create, params: { question: attributes_for(:question), user: user }
           expect(response).to redirect_to question_path(assigns(:question))
         end
+
+        it 'redirects to show view' do
+          post :create, params: { question: attributes_for(:question), user_id: user }
+          expect(response).to redirect_to question_path(assigns(:question))
+        end
+      end
+
+      context 'create subscribtion for questions owner' do
+        it 'has a valid question' do
+          post :create, params: { question: attributes_for(:question), user_id: user }
+          expect(assigns(:subscriber).question).to eq assigns(:question)
+        end
+
+        it 'has a valid user' do
+          post :create, params: { question: attributes_for(:question), user_id: user }
+          expect(assigns(:subscriber).user).to eq user
+        end
       end
   
       context 'without valid attributes' do

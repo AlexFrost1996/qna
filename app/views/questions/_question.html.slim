@@ -5,6 +5,8 @@
   .q-body
     p= @question.body
 
+  h3= render 'subscribers'
+
   - if @question.award.present?
     h3 Award:
     = image_tag url_for(@question.award.image)
