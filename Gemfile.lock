@@ -100,6 +100,7 @@ GEM
     case_transform (0.2)
       activesupport
     childprocess (4.1.0)
+    chronic (0.10.2)
     cocoon (1.2.15)
     coderay (1.1.3)
     concurrent-ruby (1.1.9)
@@ -189,6 +190,8 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
     nio4r (2.5.8)
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
@@ -284,6 +287,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
+    redis (4.6.0)
     regexp_parser (2.2.0)
     request_store (1.5.1)
       rack (>= 1.4)
@@ -307,6 +311,9 @@ GEM
       rspec-expectations (~> 3.10)
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
+    rspec-sidekiq (3.1.0)
+      rspec-core (~> 3.0, >= 3.0.0)
+      sidekiq (>= 2.4.0)
     rspec-support (3.10.3)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
@@ -327,6 +334,15 @@ GEM
     semantic_range (3.0.0)
     shoulda-matchers (5.0.0)
       activesupport (>= 5.2.0)
+    sidekiq (6.4.1)
+      connection_pool (>= 2.2.2)
+      rack (~> 2.0)
+      redis (>= 4.2.0)
+    sinatra (2.1.0)
+      mustermann (~> 1.0)
+      rack (~> 2.2)
+      rack-protection (= 2.1.0)
+      tilt (~> 2.0)
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
@@ -372,6 +388,8 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    whenever (1.0.0)
+      chronic (>= 0.6.3)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.5.1)
@@ -414,9 +432,12 @@ DEPENDENCIES
   rails-controller-testing
   react-rails
   rspec-rails (~> 5.0.0)
+  rspec-sidekiq
   sass-rails (>= 6)
   selenium-webdriver
   shoulda-matchers (~> 5.0)
+  sidekiq
+  sinatra
   slim-rails
   spring
   turbolinks (~> 5)
@@ -425,6 +446,7 @@ DEPENDENCIES
   web-console (>= 4.1.0)
   webdrivers
   webpacker (~> 5.0)
+  whenever
 
 RUBY VERSION
    ruby 2.7.4p191

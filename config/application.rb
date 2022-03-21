@@ -12,6 +12,7 @@ module Qna
     config.load_defaults 6.1
     config.token_secret_signature_key = -> { Rails.application.credentials.read }
 
+    config.active_job.queue_adapter = :sidekiq
     config.autoload_paths += [config.root.join('app')]
 
     config.generators do |g|
