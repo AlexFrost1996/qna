@@ -14,6 +14,7 @@ require("@nathanvda/cocoon")
 require("links/renderGist")
 require("votes/vote")
 require("comments/comment")
+require("questions/subscribers")
 // Support component names relative to this directory:
 var componentRequireContext = require.context("components", true);
 var ReactRailsUJS = require("react_ujs");

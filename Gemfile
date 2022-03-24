@@ -47,6 +47,9 @@ gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'pundit'
 gem 'doorkeeper'
 gem 'oj'
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'whenever', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -78,6 +81,7 @@ group :test do
   gem 'launchy'
   gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
   gem 'capybara-email'
+  gem 'rspec-sidekiq'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
