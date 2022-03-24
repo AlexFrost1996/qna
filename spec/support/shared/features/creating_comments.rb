@@ -82,7 +82,7 @@ shared_examples_for 'creating comments' do
   describe 'Unauthenticated user' do
     scenario 'could not create a comment' do
       visit path
-      expect(page).to_not have_content 'Comment'
+      expect(page).to_not have_css '.new-comment'
     end
   end
 end
