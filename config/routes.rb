@@ -62,5 +62,7 @@ Rails.application.routes.draw do
     get 'email_confirmation/:confirmation_token', action: :email_confirmation, as: :email_confirmation
   end
 
+  get :search, to: 'search#search'
+
   mount ActionCable.server => '/cable'
 end
