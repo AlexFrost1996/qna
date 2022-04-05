@@ -6,7 +6,6 @@ require "capistrano/deploy"
 require "capistrano/rvm"
 require "capistrano/bundler"
 require "capistrano/rails"
-# require "capistrano/passenger"
 require 'capistrano/sidekiq'
 install_plugin Capistrano::Sidekiq
 install_plugin Capistrano::Sidekiq::Systemd
