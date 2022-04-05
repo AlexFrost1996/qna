@@ -2,6 +2,8 @@ class Answer < ApplicationRecord
   include Votable
   include Commentable
   
+  after_create :notify_question_subscribers
+  
   has_many :links, dependent: :destroy, as: :linkable
   has_one :award
   belongs_to :question
@@ -19,5 +21,9 @@ class Answer < ApplicationRecord
       update!(best: true)
       update!(award: question.award) if question.award
     end
+  end
+
+  def notify_question_subscribers
+    NotificationJob.perform_later(question)
   end
 end
