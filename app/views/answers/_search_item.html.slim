@@ -1,2 +1,7 @@
-p
-  = link_to resource.body, answer_path(resource), target: :_blank
+p 
+  | Answer for question:
+  = link_to resource.question.title, question_path(resource.question), target: :_blank
+  br
+  | "
+  = resource.body
+  | "
