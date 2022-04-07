@@ -7,6 +7,7 @@ require "capistrano/rvm"
 require "capistrano/bundler"
 require "capistrano/rails"
 require 'capistrano/sidekiq'
+require 'capistrano/sidekiq/monit'
 install_plugin Capistrano::Sidekiq
 install_plugin Capistrano::Sidekiq::Systemd
 require 'thinking_sphinx/capistrano'
