@@ -1,5 +1,6 @@
 .question class=["question-id-#{@question.id}"]
   .question-error
+  = render 'users/user_container', resource: @question
   .q-title
     h1= @question.title
   .q-body

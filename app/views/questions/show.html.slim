@@ -1,6 +1,7 @@
-.question-container
-  = render @question
-        
-.answers
-  = render @question.answers
+- cache @question
+  .question-container
+    = render @question
+
+  .answers
+    = render @question.answers
 = render 'answers/form'
