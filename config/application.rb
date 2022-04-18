@@ -31,6 +31,20 @@ module Qna
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-    config.cache_store = :redis_store, 'redis://localhost:6379/0/cache/', { expires_in: 90.minutes }
+    # config.cache_store = :redis_store, 'redis://localhost:6379/0/cache/', { expires_in: 90.minutes }
+    
+    cache_servers = %w(redis://cache-01:6379/0 redis://cache-02:6379/0)
+    config.cache_store = :redis_cache_store, { 
+      url: cache_servers,
+      connect_timeout: 30,
+      read_timeout: 0.2,
+      write_timeout: 0.2,
+      reconnect_attempts: 1,
+      
+      error_handler: -> (method:, returning:, exception:) {
+        Raven.capture_exception exception, level: 'warning',
+        tags: { method: method, returning: returning }
+      }
+    }
   end
 end
